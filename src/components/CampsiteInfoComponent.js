@@ -1,7 +1,94 @@
-import React from 'react';
-import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, {Component} from 'react';
+import { Card, CardImg, CardText, CardBody, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label,  Row } from 'reactstrap';
+import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
 
+const required = val => val && val.length;
+const maxLength = len => val => !val || (val.length <= len);
+const minLength = len => val => val && (val.length >= len);
+
+class CommentForm extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            isModalOpen: false
+        };
+
+        this.toggleModal = this.toggleModal.bind(this);
+    }
+
+    toggleModal() {
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        });
+    }
+    handleSubmit(values) {
+        console.log("Current state is: " + JSON.stringify(values));
+        alert("Current state is: " + JSON.stringify(values));
+    }
+    
+render(){
+
+    return(
+        <div>
+            <Button type="submit" onClick={this.toggleModal} outline color="secondary"><i class="fa fa-pencil" aria-hidden="true"></i> Submit Comment</Button>
+            <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                    <LocalForm onSubmit={values => this.handleSubmit(values)}>
+                            <Row className="form-group mx-1">
+                                <Label htmlFor="Rating" >Rating</Label>
+                                <Control.select model=".rating" id = "rating" name="rating" placeholder="rating"
+                                        className="form-control">
+                                        <option value="" selected disabled>Choose Rating</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                </Control.select>
+                            </Row>
+                            <Row className="form-group mx-1">
+                                <Label htmlFor="testname" >Your Name</Label>
+                                    <Control.text model=".testname" id="testname" name="testname"
+                                        placeholder="Name"
+                                        className="form-control"
+                                        validators={{
+                                            required, 
+                                            minLength: minLength(2),
+                                            maxLength: maxLength(15)
+                                        }}
+                                    />
+                                     <Errors
+                                        className="text-danger"
+                                        model=".testname"
+                                        show="touched"
+                                        component="div"
+                                        messages={{
+                                            required: 'Required',
+                                            minLength: 'Must be at least 2 characters',
+                                            maxLength: 'Must be 15 characters or less'
+                                        }}
+                                    />
+                            </Row>
+
+                            <Row className="form-group mx-1">
+                                <Label htmlFor="Comments" >Comments</Label>
+                                    <Control.textarea model=".testcomment" id="comment" name="comment"
+                                        rows="6"
+                                        className="form-control"
+                                    />
+                            </Row>
+                            <Row className ="mx-1"> 
+                            <Button type="submit" color="primary">Submit</Button>
+                            </Row>
+                        </LocalForm>
+                    </ModalBody>
+                </Modal>
+        </div>
+    );
+    }
+}
 
 function RenderCampsite({campsite}){
     return (
@@ -28,6 +115,7 @@ function RenderComments({comments}) {
                     </div>     
                 )
             }
+            <CommentForm />
         </div>
     );   
 }
