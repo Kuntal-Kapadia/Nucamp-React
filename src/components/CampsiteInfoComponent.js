@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Card, CardImg, CardText, CardBody, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label,  Row } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent';
 
 const required = val => val && val.length;
 const maxLength = len => val => !val || (val.length <= len);
@@ -24,7 +25,8 @@ class CommentForm extends Component{
     }
     handleSubmit(values) {
         console.log("Current state is: " + JSON.stringify(values));
-        alert("Current state is: " + JSON.stringify(values));
+        // alert("Current state is: " + JSON.stringify(values));
+        alert(this.props.campsiteId + JSON.stringify(values));
         this.toggleModal();
         this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
     }
@@ -33,7 +35,7 @@ render(){
 
     return(
         <div>
-            <Button type="submit" onClick={this.toggleModal} outline color="secondary"><i class="fa fa-pencil" aria-hidden="true"></i> Submit Comment</Button>
+            <Button type="submit" onClick={this.toggleModal} outline color="secondary"><i className="fa fa-pencil" aria-hidden="true"></i> Submit Comment</Button>
             <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
                     <ModalBody>
@@ -51,8 +53,8 @@ render(){
                                 </Control.select>
                             </Row>
                             <Row className="form-group mx-1">
-                                <Label htmlFor="testname" >Your Name</Label>
-                                    <Control.text model=".testname" id="testname" name="testname"
+                                <Label htmlFor="author" >Your Name</Label>
+                                    <Control.text model=".author" id="author" name="author"
                                         placeholder="Name"
                                         className="form-control"
                                         validators={{
@@ -63,7 +65,7 @@ render(){
                                     />
                                      <Errors
                                         className="text-danger"
-                                        model=".testname"
+                                        model=".author"
                                         show="touched"
                                         component="div"
                                         messages={{
@@ -75,8 +77,8 @@ render(){
                             </Row>
 
                             <Row className="form-group mx-1">
-                                <Label htmlFor="Comments" >Comments</Label>
-                                    <Control.textarea model=".testcomment" id="comment" name="comment"
+                                <Label htmlFor="text" >Comments</Label>
+                                    <Control.textarea model=".text" id="text" name="text"
                                         rows="6"
                                         className="form-control"
                                     />
@@ -123,6 +125,26 @@ function RenderComments({comments, addComment, campsiteId}) {
 }
 
 function CampsiteInfo(props){
+    if (props.isLoading) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+    if (props.errMess) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <h4>{props.errMess}</h4>
+                    </div>
+                </div>
+            </div>
+        );
+    }
         if(props.campsite){
             return(
                 <div className="container">
