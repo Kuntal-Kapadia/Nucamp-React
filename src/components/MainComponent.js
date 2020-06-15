@@ -16,8 +16,11 @@ const mapStateToProps = state => {
         comments: state.comments,
         partners: state.partners,
         promotions: state.promotions,
-        addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text))
     };
+};
+
+const mapDispatchToProps = {
+    addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text))
 };
 
 class Main extends Component {
@@ -60,5 +63,4 @@ class Main extends Component {
     };
 }
 
-// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
