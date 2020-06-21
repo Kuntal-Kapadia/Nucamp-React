@@ -103,6 +103,10 @@ function RenderCampsite({campsite}){
                 in
                 transformProps={{
                     exitTransform: 'scale(0.5) translateY(-50%)'
+                }}
+                fadeProps={{
+                    enterOpacity: 0.99,
+                    exitOpacity: 0.30
                 }}>
             <Card>
             <CardImg top src={baseUrl + campsite.image} alt={campsite.name} />
