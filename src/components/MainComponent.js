@@ -9,7 +9,7 @@ import About from './AboutComponent';
 import CampsiteInfo from './CampsiteInfoComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators';
+import { postComment, postFeedback, fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapStateToProps = state => {
@@ -23,6 +23,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     postComment: (campsiteId, rating, author, text) => (postComment(campsiteId, rating, author, text)),
+    postFeedback: (firstName, lastName, phoneNum, email, agree, contactType, message) => (postFeedback(firstName, lastName, phoneNum, email, agree, contactType, message)),
     fetchCampsites: () => (fetchCampsites()),
     resetFeedbackForm: () => (actions.reset('feedbackForm')),
     fetchComments: () => (fetchComments()),
@@ -79,7 +80,7 @@ class Main extends Component {
                         <Route exact path='/directory' render={() => <Directory campsites={this.props.campsites} />} />
                         <Route path='/directory/:campsiteId' component={CampsiteWithId} />
                         <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
-                        <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} /> } />
+                        <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} postFeedback={this.props.postFeedback}/> } />
                         <Redirect to='/home' />
                     </Switch>
                     </CSSTransition>

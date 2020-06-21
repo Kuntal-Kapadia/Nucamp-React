@@ -5,5 +5,5 @@ export const InitialFeedback = {
     email: '',
     agree: false,
     contactType: 'Phone',
-    feedback: ''
+    message: ''
 };

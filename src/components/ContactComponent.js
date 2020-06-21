@@ -20,7 +20,7 @@ class Contact extends Component {
         email: '',
         agree: false,
         contactType: 'By Phone',
-        feedback: '',
+        message: '',
         touched: {
             firstName: false,
             lastName: false,
@@ -34,12 +34,13 @@ class Contact extends Component {
 
  
     handleSubmit(values) {
+
         console.log('Current state is: ' + JSON.stringify(values));
         alert('Current state is: ' + JSON.stringify(values));
+       
+        this.props.postFeedback(values);
         this.props.resetFeedbackForm();
     }
-
-    
 
     render () {
 

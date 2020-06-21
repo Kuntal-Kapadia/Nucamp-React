@@ -43,6 +43,49 @@ export const postComment = (campsiteId, rating, author, text) => dispatch => {
         });
 };
 
+export const addFeedback = feedback => ({
+    type: ActionTypes.ADD_FEEDBACK,
+    payload: feedback
+});
+export const postFeedback = (firstName, lastName, phoneNum, email, agree, contactType, message) => dispatch => {
+    
+    const newfeedback = {
+        firstName : firstName,
+        lastName : lastName,
+        phoneNum : phoneNum,
+        email:email,
+        agree: agree,
+        contactType: contactType,
+        message: message
+    };
+        newfeedback.date = new Date().toISOString();
+    
+    return fetch(baseUrl + 'feedback', {
+            method: "POST",
+            body: JSON.stringify(newfeedback),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => { throw error; }
+        )
+        .then(response => response.json())
+        .then(response => dispatch(addFeedback(response)))
+        .catch(error => {
+            console.log('post comment', error.message);
+            alert('Your comment could not be posted\nError: ' + error.message);
+        });
+};
+
 
 export const fetchCampsites = () => dispatch => {
     dispatch(campsitesLoading());
